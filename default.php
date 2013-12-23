@@ -43,15 +43,15 @@ require_once "configuration_jeu.php";
         $ennemisoldiers = $_REQUEST['ennemisoldiers'];
         $ratio = $ennemisoldiers/$soldiers;
         $pertes = rand(0,2*$ratio*$ennemisoldiers);
-        if($pertes > $ratioretraite*$soldiers){
-          $pertes = $ratioretraite*$soldiers;
+        if($pertes > RATIORETRAITE*$soldiers){
+          $pertes = RATIORETRAITE*$soldiers;
         }
         sub_soldiers($pertes);
-        if ($pertes >= $ratioretraite*$soldiers){
+        if ($pertes >= RATIORETRAITE*$soldiers){
           echo "Vos soldats battent en retraite !<BR>";
         }else{
           echo "L'armée ennemie est défaite et vous pillez $ennemisoldiers pièces d'or. <BR>";
-          add_gold( $ennemisoldiers * $ratiopillage );
+          add_gold( $ennemisoldiers * RATIOPILLAGE );
         }
       }
       echo "<hr>";
@@ -60,7 +60,7 @@ require_once "configuration_jeu.php";
       $recruter = $_REQUEST['recruter'];
       if( $recruter <= 0 ){
         echo "Votre recrutement doit concerner au moins un soldat. ";
-      }else if ( sub_gold($costsoldier*$recruter) ){
+      }else if ( sub_gold(COSTSOLDIER*$recruter) ){
       //  echo "Vous n'avez pas assez d'or. ";
       //}else{
         //$_SESSION['gold'] = $_SESSION['gold'] - 3*$recruter;
@@ -73,11 +73,12 @@ require_once "configuration_jeu.php";
     echo "Vous avez ".get_gold()." pi&egrave;ces d'or. <br>";
     echo "Vous avez ".get_soldiers()." soldats. <br>";
     echo "<br>";
+    include 'carte.php';
     for ($i=1 ; $i<6 ; $i++){
       $ns = rand(1,200);
       echo "Ennemi $i : $ns soldats <form action=\"\"><input type=hidden name=ennemi value=$i><input type=hidden name=ennemisoldiers value=$ns><input type=submit value=\"Attaquer\"></form>";
     }
-    echo "<hr>Recruter <form action=\"\"><input type=\"text\" name=\"recruter\"> soldats ($costsoldier po/soldat) <input type=\"submit\" value=\"Recruter\"></form>";
+    echo "<hr>Recruter <form action=\"\"><input type=\"text\" name=\"recruter\"> soldats (".COSTSOLDIER." po/soldat) <input type=\"submit\" value=\"Recruter\"></form>";
   }
 ?>
 

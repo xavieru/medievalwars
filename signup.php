@@ -1,6 +1,7 @@
 <?php
 require_once 'sql_connect.php';
 require_once 'configuration_jeu.php';
+require_once "outils.php";
 session_start();
 
    echo '<h3>S\'inscrire</h3>';  
@@ -29,8 +30,9 @@ session_start();
             echo 'Le nom ne peut pqs faire plus de 30 caractères.';  
         }
 	else 
-        { 
-            $sql = "INSERT INTO Joueurs(name,gold,soldiers) VALUES('" . mysql_real_escape_string($_POST['name']) . "', $startgold , $startsoldiers)"; 
+	{
+		list($posx, $posy) = get_free_pos();	
+            $sql = "INSERT INTO Joueurs(name,gold,soldiers,posx,posy) VALUES('" . mysql_real_escape_string($_POST['name']) . "', ".STARTGOLD." , ".STARTSOLDIERS.", $posx, $posy)"; 
                           
             $result = mysql_query($sql);  
             if(!$result)  

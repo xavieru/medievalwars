@@ -51,8 +51,9 @@ function sub_gold($cost) {
 	}
 }
 
-function get_soldiers() {
-	$sql = "SELECT soldiers FROM Joueurs WHERE id=".$_SESSION['id'];
+function get_soldiers($id = -1) {
+	if($id==-1){$id=$_SESSION['id'];}
+	$sql = "SELECT soldiers FROM Joueurs WHERE id=$id";
 	$result = mysql_query($sql);  
         if(!$result)  
         {  
@@ -75,8 +76,9 @@ function get_soldiers() {
 	return 0;
 }
 
-function set_soldiers($newsoldiers) {
-	$sql = "UPDATE Joueurs SET soldiers=$newsoldiers";
+function set_soldiers($newsoldiers, $id=-1) {
+	if($id==-1){$id=$_SESSION['id'];}
+	$sql = "UPDATE Joueurs SET soldiers=$newsoldiers WHERE $id=id";
 	$result = mysql_query($sql);  
         if(!$result)  
         {  
@@ -84,17 +86,17 @@ function set_soldiers($newsoldiers) {
         } 
 }
 
-function add_soldiers($addsoldiers) {
-	$newsoldiers = get_soldiers() + $addsoldiers;
-	set_soldiers($newsoldiers);
+function add_soldiers($addsoldiers, $id=-1) {
+	$newsoldiers = get_soldiers($id) + $addsoldiers;
+	set_soldiers($newsoldiers,$id);
 }
 
-function sub_soldiers($pertes) {
-	$soldiers = get_soldiers();
+function sub_soldiers($pertes,$id=-1) {
+	$soldiers = get_soldiers($id);
 	if ( $soldiers < $pertes ) {
 		set_soldiers(0);
 	}else{
-		add_soldiers(-$pertes);
+		add_soldiers(-$pertes,$id);
 	}
 }
 
