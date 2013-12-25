@@ -7,7 +7,8 @@ session_start();
     if($_SERVER['REQUEST_METHOD'] != 'POST')  
     {  
         echo '<form method="post" action="">  
-            Nom: <input type="text" name="name" />  
+            Nom: <input type="text" name="name" /> <BR>  
+            Mot de passe: <input type="password" name="password" /> <BR>  
             <input type="submit" value="Se connecter" />  
          </form>'; 
 
@@ -25,12 +26,13 @@ session_start();
         { 
             $sql = "SELECT  
                         id, 
-                        name 
+			name,
+		        password	
                     FROM 
                         Joueurs 
                     WHERE 
-                        name = '" . mysql_real_escape_string($_POST['name']) . "'"; 
-                          
+                        name = '" . mysql_real_escape_string($_POST['name']) . "' AND password = '".sha1($_POST['password'])."'"; 
+
             $result = mysql_query($sql);  
             if(!$result)  
             {  
@@ -40,7 +42,7 @@ session_start();
             { 
                 if(mysql_num_rows($result) == 0) 
                 { 
-                    echo 'Aucun joueur de ce nom.'; 
+                    echo 'Aucun joueur de ce nom ou mot de passe invalide.'; 
                 } 
                 else 
                 { 
