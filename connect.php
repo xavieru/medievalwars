@@ -2,6 +2,8 @@
 require_once 'sql_connect.php';
 session_start();
 
+require_once 'header.php';
+
    echo '<h3>Se connecter</h3>';  
 
     if($_SERVER['REQUEST_METHOD'] != 'POST')  

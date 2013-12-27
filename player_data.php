@@ -100,4 +100,53 @@ function sub_soldiers($pertes,$id=-1) {
 	}
 }
 
+function get_officers($id = -1) {
+	if($id==-1){$id=$_SESSION['id'];}
+	$sql = "SELECT officers FROM Joueurs WHERE id=$id";
+	$result = mysql_query($sql);  
+        if(!$result)  
+        {  
+        	echo 'Erreur MySQL pendant get_officers.'; 
+        } 
+        else 
+        { 
+        	if(mysql_num_rows($result) == 0) 
+                { 
+                    echo 'Aucun joueur de cet id.'; 
+                } 
+                else 
+                { 
+                    while($row = mysql_fetch_assoc($result)) 
+                    { 
+                        return $row['officers']; 
+		    }
+		}
+	} 
+	return 0;
+}
+
+function set_officers($newofficers, $id=-1) {
+	if($id==-1){$id=$_SESSION['id'];}
+	$sql = "UPDATE Joueurs SET officers=$newofficers WHERE $id=id";
+	$result = mysql_query($sql);  
+        if(!$result)  
+        {  
+        	echo 'Erreur MySQL pendant set_officers.'; 
+        } 
+}
+
+function add_officers($addofficers, $id=-1) {
+	$newofficers = get_officers($id) + $addofficers;
+	set_officers($newofficers,$id);
+}
+
+function sub_officers($pertes,$id=-1) {
+	$officers = get_officers($id);
+	if ( $officers < $pertes ) {
+		set_officers(0);
+	}else{
+		add_officers(-$pertes,$id);
+	}
+}
+
 ?>

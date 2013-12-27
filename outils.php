@@ -49,4 +49,29 @@ function joueur_sur($posx,$posy) {
 	return -1;
 }
 
+// renvoie l'ID d'un joueur correspondant au nom, ou -1 si il n'y en a pas
+function joueur_par_nom($name) {
+	$sql = "SELECT id FROM Joueurs WHERE name='". mysql_real_escape_string($name)."'";
+	$result = mysql_query($sql);  
+        if(!$result)  
+        {  
+        	echo 'Erreur MySQL pendant joueur_par_nom.'; 
+        } 
+        else 
+        { 
+		if(mysql_num_rows($result) == 0) {
+			return -1;
+		}else{
+                 	$row = mysql_fetch_assoc($result); 
+			return $row['id'];
+		}
+	}
+	return -1;
+}
+
+function rand1()
+{
+	return rand()/getrandmax();
+}
+
 ?>

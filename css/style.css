@@ -1,11 +1,25 @@
 body {
-	background-color: #2E3E9E;
+/* colorie le fond de la page */
+	background-color: #3E4EAE;
 }
 
+/* colorie tout les liens vers d'autre pages */
 a {
 	color: #FFFFFF;
 }
 
+/* colorie les liens quand la souris est dessus */
 a:hover {
 	color: #FF5050;
 }
+
+a.popuplink span{
+	display: none;
+}
+
+a.popuplink:hover span{
+	display: block;
+	position: absolute;
+}
+
+

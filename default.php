@@ -1,16 +1,9 @@
 <?php 
 require_once "player_data.php";
 require_once "configuration_jeu.php";
- ?>
 
-<HTML>
-
-<head>
-<title>Medieval Wars - un jeu de strat&eacute;gie m&eacute;di&eacute;vale</title>
-<style type="text/css">
-  <?php include 'css/style.css'; ?>
-</style>
-</head>
+require_once "header.php";
+?>
 
 <body>
 <h1 align=center>Medieval Wars</h1>
@@ -35,7 +28,7 @@ require_once "configuration_jeu.php";
       $_SESSION['gold']=500;
     }*/
     $name = $_SESSION['name'];
-    if (isset($_REQUEST['ennemi'])) {
+    /*if (isset($_REQUEST['ennemi'])) {
       $soldiers = get_soldiers();
       if ($soldiers==0) {
         echo "Vous n'avez aucun soldat !";
@@ -55,30 +48,41 @@ require_once "configuration_jeu.php";
         }
       }
       echo "<hr>";
-    }
+    }*/
     if (isset($_REQUEST['recruter'])) {
       $recruter = $_REQUEST['recruter'];
-      if( $recruter <= 0 ){
-        echo "Votre recrutement doit concerner au moins un soldat. ";
-      }else if ( sub_gold(COSTSOLDIER*$recruter) ){
+      $recruterO = $_REQUEST['recruterO'];
+      if( $recruter < 0 || $recruterO < 0 ){
+        echo "Votre recrutement doit concerner des nombres positifs. ";
+      }else if ( sub_gold(COSTSOLDIER*$recruter+COSTOFFICER*$recruterO) ){ // sinon sub_gold envoie un message d'erreur
       //  echo "Vous n'avez pas assez d'or. ";
       //}else{
-        //$_SESSION['gold'] = $_SESSION['gold'] - 3*$recruter;
-        add_soldiers($recruter);
-        echo "$recruter soldats recrut&eacute;(s)<BR>";
+	      //$_SESSION['gold'] = $_SESSION['gold'] - 3*$recruter;
+	if($recruter > 0) {
+        	add_soldiers($recruter);
+		echo "$recruter soldats recrut&eacute;(s)<BR>";
+	}
+	if($recruterO > 0) {
+        	add_officers($recruterO);
+		echo "$recruterO officiers recrut&eacute;(s)<BR>";
+	}
       }
       echo "<hr>";
     }
     echo "Votre nom est $name. <a href=\"".$_SERVER['PHP_SELF']."?logout=1\">Se déconnecter</a><br>";
     echo "Vous avez ".get_gold()." pi&egrave;ces d'or. <br>";
     echo "Vous avez ".get_soldiers()." soldats. <br>";
+    echo "Vous avez ".get_officers()." officiers. <br>";
     echo "<br>";
     include 'carte.php';
-    for ($i=1 ; $i<6 ; $i++){
+    /*for ($i=1 ; $i<6 ; $i++){
       $ns = rand(1,200);
       echo "Ennemi $i : $ns soldats <form action=\"\"><input type=hidden name=ennemi value=$i><input type=hidden name=ennemisoldiers value=$ns><input type=submit value=\"Attaquer\"></form>";
-    }
-    echo "<hr>Recruter <form action=\"\"><input type=\"text\" name=\"recruter\"> soldats (".COSTSOLDIER." po/soldat) <input type=\"submit\" value=\"Recruter\"></form>";
+    }*/
+    echo "<hr>Recruter <form action=\"\">
+	    <input type=\"text\" name=\"recruter\"> soldats (".COSTSOLDIER." po/soldat) <BR>
+	    <input type=\"text\" name=\"recruterO\"> officiers (".COSTOFFICER." po/officier) <BR>
+	    <input type=\"submit\" value=\"Recruter\"></form>";
   }
 ?>
 

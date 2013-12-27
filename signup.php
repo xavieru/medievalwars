@@ -8,6 +8,7 @@ function disp_form()
 {
         echo '<form method="post" action="">  
 		Nom: <input type="text" name="name" />  <BR>
+		Adresse mail <input type="text" name="email"/> <BR>
                 Mot de passe: <input type="password" name="password" /> <BR> 
                 Répétez le mot de passe: <input type="password" name="password_check" /> <BR> 
 	    <input type="submit" value="S\'inscrire" />  
@@ -33,14 +34,23 @@ function disp_form()
         {  
             echo 'Le nom du joueur ne doit comporter que des lettres et des chiffres. ';  
 	    disp_form();
-        }  
+	}
+	else if( joueur_par_nom($_POST['name'])!=-1 )
+	{
+		echo 'Un joueur de ce nom existe déjà. ';
+	}
 	else if(strlen($_POST['name']) > 30)  
         {  
             echo 'Le nom ne peut pqs faire plus de 30 caractères.';  
 	    disp_form();
 	}
+	else if(!isset($_POST['email']) || $_POST['email']=="" )
+	{
+	    echo 'le champs adresse mail du formulaire ne doit pas être vide.';
+	    disp_form();
+	}
 	else if(!isset($_POST['password']) || $_POST['password']=="" )  
-        {  
+	{ 
             echo 'Le champ mot de passe du formulaire ne doit pas être vide.';  
 	    disp_form();
         }  
@@ -56,7 +66,8 @@ function disp_form()
 	else 
 	{
 		list($posx, $posy) = get_free_pos();	
-            $sql = "INSERT INTO Joueurs(name,password,gold,soldiers,posx,posy) VALUES('" . mysql_real_escape_string($_POST['name'])."','".sha1($_POST['password']). "', ".STARTGOLD." , ".STARTSOLDIERS.", $posx, $posy)"; 
+		$sql = "INSERT INTO Joueurs(name,password,email,gold,soldiers,posx,posy)
+			VALUES('" . mysql_real_escape_string($_POST['name'])."','".sha1($_POST['password']). "','" . mysql_real_escape_string($_POST['email'])."', ".STARTGOLD." , ".STARTSOLDIERS.", $posx, $posy)"; 
                           
             $result = mysql_query($sql);  
             if(!$result)  
